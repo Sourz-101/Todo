@@ -2,22 +2,26 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { TodoProvider } from "./context";
 import { TodoForm, TodoItem } from './components/index'
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
   const [todos, setTodos] = useState([]);
 
   const addTodo = (todo) => {
     setTodos((prev) => [{ id: Date.now(), ...todo }, ...prev]);
+    toast.success('Task Added!');
   };
 
   const updateTodo = (id, todo) => {
     setTodos((prev) =>
       prev.map((prevTodo) => (prevTodo.id === id ? todo : prevTodo))
     );
+    toast.success('Task Updated!');
   };
 
   const deleteTodo = (id) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    toast.error('Task Deleted!');
   };
 
   const toggleComplete = (id) => {
@@ -63,6 +67,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Toaster />
     </TodoProvider>
   );
 }
