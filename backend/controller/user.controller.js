@@ -12,7 +12,6 @@ export const register = async (req, res) => {
 
     var user = await User.findOne({ email })
     if( user ) {
-      console.log(user.email);
       return res.status(400).json({ message: "User already exists" });
     }
 
@@ -36,3 +35,50 @@ export const register = async (req, res) => {
     res.status(500).json({ message: `Error in register controller -> ${error.message}` });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if(!email || !password) {
+      return res.status(400).json({ message: `please fill all the fields ${email} ${password}` });
+    }
+
+    const user = await User.findOne({ email });
+
+    if(!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if(!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    generateToken(user._id, res);
+
+    res.status(200).json({ 
+      message: "User logged in successfully",
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+
+    console.log(`${user.name} logged in successfully with emai: ${user.email}`);
+
+  } catch (error) {
+    res.status(500).json({ message: `Error in login controller -> ${error.message}` });
+  }
+}
+
+export const logout = async (req, res) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(0),
+    })
+    .json({ 
+      message: "Logged out successfully",
+    });
+}
