@@ -13,12 +13,17 @@ export const TodoContext = createContext({
   updateTodo: (id, todo) => {},
   deleteTodo: (id) => {},
   toggleComplete: (id) => {},
+  
+
 });
 
-// export const TodoProvider = TodoContext.Provider;
 
 export const TodoProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+
+
 
   const addTodo = (todo) => {
     setTodos((prev) => [{ id: Date.now(), ...todo }, ...prev]);
@@ -61,7 +66,7 @@ export const TodoProvider = ({ children }) => {
 
   return (
     <TodoContext.Provider
-      value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete }}
+      value={{ todos, addTodo, updateTodo, deleteTodo, toggleComplete, isAuthenticated, setIsAuthenticated, user, setUser}}
     >
       {children}
     </TodoContext.Provider>

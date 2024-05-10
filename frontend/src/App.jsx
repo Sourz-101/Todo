@@ -5,6 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Singnup from "./pages/Signup";
 
+export const server = "http://localhost:3000/api";
+
 function App() {
   return (
     <>

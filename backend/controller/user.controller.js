@@ -41,7 +41,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if(!email || !password) {
-      return res.status(400).json({ message: `please fill all the fields ${email} ${password}` });
+      return res.status(400).json({ message: `please fill all the fields` });
     }
 
     const user = await User.findOne({ email });

@@ -1,14 +1,13 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import "../App.css";
 import TodoItem from "../components/TodoItem";
 import TodoForm from "../components/TodoForm";
-import { TodoContext } from "../context/TodoContext";
+import { useTodo } from "../context/TodoContext";
 
 const Home = () => {
 
-  const { todos } = useContext(TodoContext);
+  const { todos } = useTodo();
 
-  
   return (
     <div className="bg-[#172842] min-h-screen py-8">
       <div className="w-full max-w-2xl mx-auto shadow-lg rounded-lg px-4 py-3 text-white">
@@ -29,4 +28,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default Home;
