@@ -73,12 +73,17 @@ export const login = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
-  res
-    .status(200)
-    .cookie("token", "", {
-      expires: new Date(0),
-    })
-    .json({ 
-      message: "Logged out successfully",
-    });
+ try {
+   res
+     .status(200)
+     .cookie("token", "", {
+       expires: new Date(0),
+     })
+     .json({ 
+       message: "Logged out successfully",
+     });
+  console.log(`${req.user.name} logged out successfully`);
+ } catch (error) {
+   res.status(500).json({ message: `Error in logout controller -> ${error.message}` });
+ }
 }
