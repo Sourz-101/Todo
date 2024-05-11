@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { TodoContext, useTodo } from "../context/TodoContext";
 
 const Login = () => {
-  const { setIsAuthenticated, isAuthenticated } = useTodo();
+  const { setIsAuthenticated, isAuthenticated, setUser } = useTodo();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,9 +28,8 @@ const Login = () => {
       )
       .then((res) => {
         toast.success(res.data.message);
-        console.log("res", res.data);
         setIsAuthenticated(true);
-        console.log("isAuthenticated", isAuthenticated);
+        setUser(res.data.user)
       })
       .catch((err) => {
         if (err.response) {

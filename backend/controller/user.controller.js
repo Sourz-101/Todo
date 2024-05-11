@@ -60,9 +60,11 @@ export const login = async (req, res) => {
 
     res.status(200).json({ 
       message: "User logged in successfully",
-      _id: user._id,
-      name: user.name,
-      email: user.email,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      }
     });
 
     console.log(`${user.name} logged in successfully with emai: ${user.email}`);

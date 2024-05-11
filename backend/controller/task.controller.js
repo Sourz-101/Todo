@@ -13,7 +13,10 @@ export const createTask = async (req, res) => {
       user: req.user,
     });
 
-    res.status(201).json({ message: "Task created successfully" });
+    res.status(201).json({ 
+      message: "Task created successfully",
+      task,
+     });
 
     await task.save();
   } catch (error) {
@@ -40,7 +43,6 @@ export const updateTask = async (req, res) => {
     const {title, isCompleted} = req.body;
 
     const task = await Task.findById(id);
-    console.log(id);
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });

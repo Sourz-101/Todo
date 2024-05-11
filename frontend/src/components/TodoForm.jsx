@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useTodo } from "../context/TodoContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { server } from "../App";
 
 function TodoForm() {
 
@@ -11,7 +14,9 @@ function TodoForm() {
 
     if(!todo) return;
 
-    addTodo({todo});
+    addTodo(todo);
+
+
     setTodo('');
   }
 
