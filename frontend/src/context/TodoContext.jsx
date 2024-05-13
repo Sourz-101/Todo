@@ -21,7 +21,11 @@ export const TodoProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const [currUser, setCurrUser] = useState(null);
+
   const addTodo = async (todo) => {
+
+    console.log("ADD todo fucntion sedioa ios hfdiafasdfa vdfc");
     await axios
       .post(
         `${server}/task/new`,
@@ -48,7 +52,8 @@ export const TodoProvider = ({ children }) => {
       })
       .then((res) => {
         toast.success(res.data.message);
-        setTodos((prev) => prev.filter((todo) => todo.id !== id));
+        const newTodos = todos.filter((todo) => todo._id !== id);
+        setTodos(newTodos);
       })
       .catch((err) => {
         console.log(err);
@@ -74,6 +79,8 @@ export const TodoProvider = ({ children }) => {
   };
 
   const toggleComplete = (id, todo) => {
+
+    console.log("toggle complete", id, todo.isCompleted);
     axios
       .put(
         `${server}/task/update/${id}`,
@@ -100,39 +107,54 @@ export const TodoProvider = ({ children }) => {
 
   const setUser = (user) => {
     console.log("user", user);
+    setCurrUser(user);
     localStorage.setItem("user", JSON.stringify(user));
   };
 
   const logout = () => {
+    axios.get(`${server}/user/logout`, {
+      withCredentials: true,
+    })
     localStorage.removeItem("user");
     localStorage.removeItem("todos");
+    setCurrUser(null);
     setIsAuthenticated(false);
   }
 
-  // Use Effect to fetch todos from the server
-  useEffect(() => {
-    let todos = axios
-      .get(`${server}/task/all`, {
-        withCredentials: true,
-      })
+  const saveTodo = async (todo) => {
+    await axios
+      .get(
+        `${server}/task/all`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setTodos(res.data.tasks);
       })
       .catch((err) => {
-        console.log("err", err);
+        console.log(err);
+        toast.error(err?.response?.data?.message);
       });
+  }
 
-    todos = JSON.parse(localStorage.getItem("todos"));
 
-    if (localStorage.getItem("user")) {
+  // Use Effect to fetch todos from the server
+  useEffect(() => {
+    if(currUser) {
+      saveTodo();
       setIsAuthenticated(true);
     }
-  }, []);
 
-  // Use Effect to store todos in local storage
+    
+  }, [currUser]);
+
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    if (localStorage.getItem("user")) {
+      setIsAuthenticated(true);
+      setCurrUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
 
   return (
     <TodoContext.Provider

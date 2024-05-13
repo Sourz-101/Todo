@@ -13,6 +13,8 @@ export const createTask = async (req, res) => {
       user: req.user,
     });
 
+    console.log(req.user);
+
     res.status(201).json({ 
       message: "Task created successfully",
       task,
@@ -49,7 +51,7 @@ export const updateTask = async (req, res) => {
     }
 
     if(title) task.title = title;
-    if(isCompleted) task.isCompleted = isCompleted;
+    task.isCompleted = isCompleted;
 
     await task.save();
 
